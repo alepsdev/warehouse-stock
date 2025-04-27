@@ -4,28 +4,28 @@ import { toast } from "@/components/ui/sonner";
 const DEFAULT_PRODUCTS: Product[] = [
   {
     id: "1",
-    name: "Wooden Cabinet",
+    name: "Madeira",
     quantity: 10,
-    description: "Premium oak wood cabinet",
-    category: "Storage",
+    description: "Madeira Premium",
+    category: "ESTOQUE",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
     id: "2",
-    name: "Office Desk",
+    name: "Mesa Office Desk",
     quantity: 5,
-    description: "Ergonomic office desk with drawer",
-    category: "Office",
+    description: "Mesa Ergonomica office desk",
+    category: "ESCRITORIO",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
     id: "3",
-    name: "Dining Table",
+    name: "Mesa de Cabeceira",
     quantity: 8,
-    description: "Extendable dining table for 6-8 people",
-    category: "Dining",
+    description: "Mesa de Cabeceira com estrutura de madeira",
+    category: "QUARTO",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
@@ -35,29 +35,29 @@ const DEFAULT_MOVEMENTS: Movement[] = [
   {
     id: "1",
     productId: "1",
-    productName: "Wooden Cabinet",
+    productName: "Madeira Premium",
     type: "ADD",
     quantity: 10,
     date: new Date().toISOString(),
-    notes: "Initial stock"
+    notes: "Estoque Inicial"
   },
   {
     id: "2",
     productId: "2",
-    productName: "Office Desk",
+    productName: "Mesa Office Desk",
     type: "ADD",
     quantity: 5,
     date: new Date().toISOString(),
-    notes: "Initial stock"
+    notes: "Estoque Inicial"
   },
   {
     id: "3",
     productId: "3",
-    productName: "Dining Table",
+    productName: "Mesa de Cabeceira",
     type: "ADD",
     quantity: 8,
     date: new Date().toISOString(),
-    notes: "Initial stock"
+    notes: "Estoque Inicial"
   }
 ];
 
