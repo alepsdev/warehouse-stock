@@ -1,4 +1,3 @@
-
 import { Product, Movement } from "../types";
 import { toast } from "@/components/ui/sonner";
 import { jsPDF } from "jspdf";
@@ -43,9 +42,11 @@ export const generateInventoryPDF = (products: Product[]): void => {
     const totalItems = products.reduce((sum, product) => sum + product.quantity, 0);
     const totalProducts = products.length;
     
+    const finalY = (doc as any).lastAutoTable.finalY;
+
     doc.setFontSize(12);
-    doc.text(`Total Products: ${totalProducts}`, 14, doc.autoTable.previous.finalY + 10);
-    doc.text(`Total Items in Stock: ${totalItems}`, 14, doc.autoTable.previous.finalY + 18);
+    doc.text(`Total Products: ${totalProducts}`, 14, finalY + 10);
+    doc.text(`Total Items in Stock: ${totalItems}`, 14, finalY + 18);
     
     // Save the PDF
     doc.save("warehouse-inventory-report.pdf");
@@ -93,10 +94,12 @@ export const generateMovementsPDF = (movements: Movement[]): void => {
       .filter(m => m.type === 'REMOVE')
       .reduce((sum, m) => sum + m.quantity, 0);
     
+    const finalY = (doc as any).lastAutoTable.finalY;
+
     doc.setFontSize(12);
-    doc.text(`Total Added Items: ${addedItems}`, 14, doc.autoTable.previous.finalY + 10);
-    doc.text(`Total Removed Items: ${removedItems}`, 14, doc.autoTable.previous.finalY + 18);
-    doc.text(`Net Change: ${addedItems - removedItems}`, 14, doc.autoTable.previous.finalY + 26);
+    doc.text(`Total Added Items: ${addedItems}`, 14, finalY + 10);
+    doc.text(`Total Removed Items: ${removedItems}`, 14, finalY + 18);
+    doc.text(`Net Change: ${addedItems - removedItems}`, 14, finalY + 26);
     
     // Save the PDF
     doc.save("warehouse-movement-history.pdf");
