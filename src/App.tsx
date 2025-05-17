@@ -1,4 +1,3 @@
-
 import { Toaster as ShadcnToaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -34,7 +33,7 @@ const App = () => (
       <ShadcnToaster />
       <Sonner />
       <AuthProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/">
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route 
