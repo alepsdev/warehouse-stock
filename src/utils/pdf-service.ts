@@ -1,5 +1,4 @@
 import { Product, Movement } from "../types";
-import { toast } from "@/components/ui/sonner";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
 
@@ -10,20 +9,44 @@ declare module "jspdf" {
   }
 }
 
+// Helper to format date/time
+const formatDateTime = (date: Date | string) => {
+  return new Date(date).toLocaleString();
+};
+
+// PDF generation result type
+export type PDFResult = {
+  blob: Blob;
+  url: string;
+};
+
+// Core PDF save/download logic
+const downloadPDF = (blob: Blob, filename: string) => {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
 // Generate inventory report PDF
-export const generateInventoryPDF = (products: Product[]): void => {
+export const generateInventoryPDF = (
+  products: Product[],
+  options?: {
+    filename?: string;
+    onSuccess?: (result: PDFResult) => void;
+    onError?: (error: unknown) => void;
+  }
+): void => {
   try {
     const doc = new jsPDF();
-    
-    // Add title
     doc.setFontSize(20);
     doc.text("Warehouse - Inventory Report", 14, 22);
-    
-    // Add date
     doc.setFontSize(10);
-    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 30);
-    
-    // Add table
+    doc.text(`Generated on: ${formatDateTime(new Date())}`, 14, 30);
     doc.autoTable({
       startY: 35,
       head: [['ID', 'Name', 'Quantity', 'Category', 'Description']],
@@ -37,45 +60,43 @@ export const generateInventoryPDF = (products: Product[]): void => {
       theme: 'striped',
       headStyles: { fillColor: [40, 115, 160] }
     });
-    
-    // Add summary info
     const totalItems = products.reduce((sum, product) => sum + product.quantity, 0);
     const totalProducts = products.length;
-    
     const finalY = (doc as any).lastAutoTable.finalY;
-
     doc.setFontSize(12);
     doc.text(`Total Products: ${totalProducts}`, 14, finalY + 10);
     doc.text(`Total Items in Stock: ${totalItems}`, 14, finalY + 18);
-    
-    // Save the PDF
-    doc.save("warehouse-inventory-report.pdf");
-    toast.success("Inventory report generated successfully");
+    const filename = options?.filename || "warehouse-inventory-report.pdf";
+    const blob = doc.output('blob');
+    const url = URL.createObjectURL(blob);
+    downloadPDF(blob, filename);
+    options?.onSuccess?.({ blob, url });
   } catch (error) {
-    console.error('Error generating PDF:', error);
-    toast.error('Error generating PDF report');
+    options?.onError?.(error);
+    // Optionally, you can log or handle error here
   }
 };
 
 // Generate movement history report PDF
-export const generateMovementsPDF = (movements: Movement[]): void => {
+export const generateMovementsPDF = (
+  movements: Movement[],
+  options?: {
+    filename?: string;
+    onSuccess?: (result: PDFResult) => void;
+    onError?: (error: unknown) => void;
+  }
+): void => {
   try {
     const doc = new jsPDF();
-    
-    // Add title
     doc.setFontSize(20);
     doc.text("Warehouse - Movement History Report", 14, 22);
-    
-    // Add date range
     doc.setFontSize(10);
-    doc.text(`Generated on: ${new Date().toLocaleString()}`, 14, 30);
-    
-    // Add table
+    doc.text(`Generated on: ${formatDateTime(new Date())}`, 14, 30);
     doc.autoTable({
       startY: 35,
       head: [['Date', 'Product', 'Type', 'Quantity', 'Notes']],
       body: movements.map(movement => [
-        new Date(movement.date).toLocaleString(),
+        formatDateTime(movement.date),
         movement.productName,
         movement.type,
         movement.quantity,
@@ -84,28 +105,24 @@ export const generateMovementsPDF = (movements: Movement[]): void => {
       theme: 'striped',
       headStyles: { fillColor: [40, 115, 160] }
     });
-    
-    // Add summary info
     const addedItems = movements
       .filter(m => m.type === 'ADD')
       .reduce((sum, m) => sum + m.quantity, 0);
-      
     const removedItems = movements
       .filter(m => m.type === 'REMOVE')
       .reduce((sum, m) => sum + m.quantity, 0);
-    
     const finalY = (doc as any).lastAutoTable.finalY;
-
     doc.setFontSize(12);
     doc.text(`Total Added Items: ${addedItems}`, 14, finalY + 10);
     doc.text(`Total Removed Items: ${removedItems}`, 14, finalY + 18);
     doc.text(`Net Change: ${addedItems - removedItems}`, 14, finalY + 26);
-    
-    // Save the PDF
-    doc.save("warehouse-movement-history.pdf");
-    toast.success("Movement history report generated successfully");
+    const filename = options?.filename || "warehouse-movement-history.pdf";
+    const blob = doc.output('blob');
+    const url = URL.createObjectURL(blob);
+    downloadPDF(blob, filename);
+    options?.onSuccess?.({ blob, url });
   } catch (error) {
-    console.error('Error generating PDF:', error);
-    toast.error('Error generating PDF report');
+    options?.onError?.(error);
+    // Optionally, you can log or handle error here
   }
 };
