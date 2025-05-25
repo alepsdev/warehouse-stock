@@ -32,7 +32,12 @@ const downloadPDF = (blob: Blob, filename: string) => {
   URL.revokeObjectURL(url);
 };
 
-// Generate inventory report PDF
+// Função para revogar a URL do PDF
+export const revokePDFUrl = (url: string) => {
+  URL.revokeObjectURL(url);
+};
+
+// Gera PDF simples de inventário e retorna URL para preview
 export const generateInventoryPDF = (
   products: Product[],
   options?: {
@@ -43,41 +48,42 @@ export const generateInventoryPDF = (
 ): void => {
   try {
     const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("Warehouse - Inventory Report", 14, 22);
+    let y = 15;
+    doc.setFontSize(16);
+    doc.text("Relatório de Estoque", 10, y);
+    y += 8;
     doc.setFontSize(10);
-    doc.text(`Generated on: ${formatDateTime(new Date())}`, 14, 30);
-    doc.autoTable({
-      startY: 35,
-      head: [['ID', 'Name', 'Quantity', 'Category', 'Description']],
-      body: products.map(product => [
-        product.id,
-        product.name,
-        product.quantity,
-        product.category,
-        product.description
-      ]),
-      theme: 'striped',
-      headStyles: { fillColor: [40, 115, 160] }
-    });
-    const totalItems = products.reduce((sum, product) => sum + product.quantity, 0);
-    const totalProducts = products.length;
-    const finalY = (doc as any).lastAutoTable.finalY;
+    doc.text(`Gerado em: ${formatDateTime(new Date())}`, 10, y);
+    y += 10;
     doc.setFontSize(12);
-    doc.text(`Total Products: ${totalProducts}`, 14, finalY + 10);
-    doc.text(`Total Items in Stock: ${totalItems}`, 14, finalY + 18);
-    const filename = options?.filename || "warehouse-inventory-report.pdf";
+    products.forEach((product, idx) => {
+      doc.text(
+        `${idx + 1}. ${product.name} | Qtd: ${product.quantity} | Cat: ${product.category}`,
+        10,
+        y
+      );
+      y += 7;
+      if (product.description) {
+        doc.setFontSize(10);
+        doc.text(`Descrição: ${product.description}`, 14, y);
+        y += 6;
+        doc.setFontSize(12);
+      }
+      if (y > 270) {
+        doc.addPage();
+        y = 15;
+      }
+    });
+    const filename = options?.filename || "relatorio-estoque.pdf";
     const blob = doc.output('blob');
     const url = URL.createObjectURL(blob);
-    downloadPDF(blob, filename);
     options?.onSuccess?.({ blob, url });
   } catch (error) {
     options?.onError?.(error);
-    // Optionally, you can log or handle error here
   }
 };
 
-// Generate movement history report PDF
+// Gera PDF simples de movimentações e retorna URL para preview
 export const generateMovementsPDF = (
   movements: Movement[],
   options?: {
@@ -88,41 +94,37 @@ export const generateMovementsPDF = (
 ): void => {
   try {
     const doc = new jsPDF();
-    doc.setFontSize(20);
-    doc.text("Warehouse - Movement History Report", 14, 22);
+    let y = 15;
+    doc.setFontSize(16);
+    doc.text("Histórico de Movimentações", 10, y);
+    y += 8;
     doc.setFontSize(10);
-    doc.text(`Generated on: ${formatDateTime(new Date())}`, 14, 30);
-    doc.autoTable({
-      startY: 35,
-      head: [['Date', 'Product', 'Type', 'Quantity', 'Notes']],
-      body: movements.map(movement => [
-        formatDateTime(movement.date),
-        movement.productName,
-        movement.type,
-        movement.quantity,
-        movement.notes
-      ]),
-      theme: 'striped',
-      headStyles: { fillColor: [40, 115, 160] }
-    });
-    const addedItems = movements
-      .filter(m => m.type === 'ADD')
-      .reduce((sum, m) => sum + m.quantity, 0);
-    const removedItems = movements
-      .filter(m => m.type === 'REMOVE')
-      .reduce((sum, m) => sum + m.quantity, 0);
-    const finalY = (doc as any).lastAutoTable.finalY;
+    doc.text(`Gerado em: ${formatDateTime(new Date())}`, 10, y);
+    y += 10;
     doc.setFontSize(12);
-    doc.text(`Total Added Items: ${addedItems}`, 14, finalY + 10);
-    doc.text(`Total Removed Items: ${removedItems}`, 14, finalY + 18);
-    doc.text(`Net Change: ${addedItems - removedItems}`, 14, finalY + 26);
-    const filename = options?.filename || "warehouse-movement-history.pdf";
+    movements.forEach((m, idx) => {
+      doc.text(
+        `${idx + 1}. ${formatDateTime(m.date)} | ${m.productName} | ${m.type === 'ADD' ? 'Entrada' : 'Saída'} | Qtd: ${m.quantity}`,
+        10,
+        y
+      );
+      y += 7;
+      if (m.notes) {
+        doc.setFontSize(10);
+        doc.text(`Obs: ${m.notes}`, 14, y);
+        y += 6;
+        doc.setFontSize(12);
+      }
+      if (y > 270) {
+        doc.addPage();
+        y = 15;
+      }
+    });
+    const filename = options?.filename || "relatorio-movimentacoes.pdf";
     const blob = doc.output('blob');
     const url = URL.createObjectURL(blob);
-    downloadPDF(blob, filename);
     options?.onSuccess?.({ blob, url });
   } catch (error) {
     options?.onError?.(error);
-    // Optionally, you can log or handle error here
   }
 };

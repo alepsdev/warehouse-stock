@@ -1,15 +1,16 @@
-
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Download } from "lucide-react";
 import { Product, Movement } from "@/types";
 import { getProducts, getMovements, exportCSV } from "@/utils/csv-service";
-import { generateInventoryPDF, generateMovementsPDF } from "@/utils/pdf-service";
+import { generateInventoryPDF, generateMovementsPDF, revokePDFUrl } from "@/utils/pdf-service";
 
 const Reports: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [movements, setMovements] = useState<Movement[]>([]);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+  const [pdfType, setPdfType] = useState<"inventory" | "movements" | null>(null);
   
   useEffect(() => {
     const productData = getProducts();
@@ -17,14 +18,30 @@ const Reports: React.FC = () => {
     
     setProducts(productData);
     setMovements(movementData);
+    // Limpa o PDF ao desmontar
+    return () => {
+      if (pdfUrl) revokePDFUrl(pdfUrl);
+    };
   }, []);
   
   const handleInventoryReport = () => {
-    generateInventoryPDF(products);
+    if (pdfUrl) revokePDFUrl(pdfUrl);
+    generateInventoryPDF(products, {
+      onSuccess: ({ url }) => {
+        setPdfUrl(url);
+        setPdfType("inventory");
+      }
+    });
   };
   
   const handleMovementsReport = () => {
-    generateMovementsPDF(movements);
+    if (pdfUrl) revokePDFUrl(pdfUrl);
+    generateMovementsPDF(movements, {
+      onSuccess: ({ url }) => {
+        setPdfUrl(url);
+        setPdfType("movements");
+      }
+    });
   };
   
   const handleExportProductsCSV = () => {
@@ -185,6 +202,21 @@ const Reports: React.FC = () => {
                 <Download size={16} />
               </Button>
             </div>
+            {/* Preview do PDF */}
+            {pdfUrl && (
+              <div className="mt-6">
+                <div className="mb-2 font-semibold">
+                  Preview: {pdfType === "inventory" ? "Relatório de Estoque" : "Histórico de Movimentações"}
+                </div>
+                <iframe
+                  src={pdfUrl}
+                  width="100%"
+                  height="600"
+                  style={{ border: "1px solid #ccc" }}
+                  title="Preview PDF"
+                />
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
