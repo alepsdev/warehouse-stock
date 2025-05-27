@@ -12,7 +12,7 @@ const Header: React.FC = () => {
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center gap-2">
           <Warehouse size={32} />
-          <h1 className="text-2xl font-bold">Almoxarifado</h1>
+          <h1 className="text-2xl font-bold">Warehouse Stock</h1>
         </div>
         
         {isAuthenticated && (

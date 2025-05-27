@@ -147,7 +147,7 @@ const Inventory: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-warehouse-900">Inventory Control</h1>
+      <h1 className="text-3xl font-bold text-warehouse-900">Controle de Estoque</h1>
       
       {/* Action Buttons */}
       <div className="flex flex-col sm:flex-row gap-4">
@@ -156,7 +156,7 @@ const Inventory: React.FC = () => {
           className="flex-1 bg-green-600 hover:bg-green-700"
         >
           <ArrowUpCircle className="mr-2 h-5 w-5" />
-          Add Inventory
+          Adicionar
         </Button>
         
         <Button
@@ -164,7 +164,7 @@ const Inventory: React.FC = () => {
           className="flex-1 bg-red-600 hover:bg-red-700"
         >
           <ArrowDownCircle className="mr-2 h-5 w-5" />
-          Remove Inventory
+          Remover
         </Button>
       </div>
       
@@ -172,7 +172,7 @@ const Inventory: React.FC = () => {
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
         <Input 
-          placeholder="Search products..." 
+          placeholder="Buscar produtos..." 
           className="pl-10"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -208,7 +208,7 @@ const Inventory: React.FC = () => {
                       setShowAddDialog(true);
                     }}
                   >
-                    Add
+                    +
                   </Button>
                   <Button 
                     size="sm"
@@ -218,7 +218,7 @@ const Inventory: React.FC = () => {
                       setShowRemoveDialog(true);
                     }}
                   >
-                    Remove
+                    -
                   </Button>
                 </div>
               </div>
@@ -239,24 +239,24 @@ const Inventory: React.FC = () => {
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Inventory</DialogTitle>
+            <DialogTitle>Adicionar</DialogTitle>
             <DialogDescription>
-              Add items to your inventory stock
+              Adiciona itens ao estoque
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label>Select Product</Label>
+              <Label>Selecione o Produto</Label>
               <Command className="border rounded-md">
                 <CommandInput 
-                  placeholder="Search for a product..." 
+                  placeholder="Pesquisar por um produto..." 
                   value={productNameFilter}
                   onValueChange={setProductNameFilter}
                 />
                 <CommandList>
-                  <CommandEmpty>No products found</CommandEmpty>
-                  <CommandGroup heading="Products">
+                  <CommandEmpty>Nenhum produto encontrado</CommandEmpty>
+                  <CommandGroup heading="Produtos">
                     {productSuggestions.map(product => (
                       <CommandItem 
                         key={product.id}
@@ -318,7 +318,7 @@ const Inventory: React.FC = () => {
               onClick={handleAddInventory}
               className="bg-green-600 hover:bg-green-700"
             >
-              Add to Inventory
+              Adicionar ao Estoque
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -328,24 +328,24 @@ const Inventory: React.FC = () => {
       <Dialog open={showRemoveDialog} onOpenChange={setShowRemoveDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Remove Inventory</DialogTitle>
+            <DialogTitle>Remover</DialogTitle>
             <DialogDescription>
-              Remove items from your inventory stock
+              Remove itens do estoque
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label>Select Product</Label>
+              <Label>Selecione o Produto</Label>
               <Command className="border rounded-md">
                 <CommandInput 
-                  placeholder="Search for a product..." 
+                  placeholder="Pesquisar por um produto..." 
                   value={productNameFilter}
                   onValueChange={setProductNameFilter}
                 />
                 <CommandList>
-                  <CommandEmpty>No products found</CommandEmpty>
-                  <CommandGroup heading="Products">
+                  <CommandEmpty>Nenhum produto encontrado</CommandEmpty>
+                  <CommandGroup heading="Produtos">
                     {productSuggestions.map(product => (
                       <CommandItem 
                         key={product.id}
@@ -369,7 +369,7 @@ const Inventory: React.FC = () => {
             {selectedProduct && (
               <>
                 <div className="space-y-2">
-                  <Label htmlFor="remove-quantity">Quantity</Label>
+                  <Label htmlFor="remove-quantity">Quantidade</Label>
                   <Input
                     id="remove-quantity"
                     type="number"
@@ -379,12 +379,12 @@ const Inventory: React.FC = () => {
                     onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Available stock: {selectedProduct.quantity}
+                    Estoque disponível: {selectedProduct.quantity}
                   </p>
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="remove-notes">Notes (Optional)</Label>
+                  <Label htmlFor="remove-notes">Notas (Opcional)</Label>
                   <Textarea
                     id="remove-notes"
                     value={notes}
@@ -411,7 +411,7 @@ const Inventory: React.FC = () => {
               onClick={handleRemoveInventory}
               className="bg-red-600 hover:bg-red-700"
             >
-              Remove from Inventory
+              Remover do Estoque
             </Button>
           </DialogFooter>
         </DialogContent>
