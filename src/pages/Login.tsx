@@ -29,7 +29,7 @@ const Login: React.FC = () => {
           <div className="flex justify-center mb-4">
             <Warehouse size={64} className="text-warehouse-700" />
           </div>
-          <CardTitle className="text-3xl font-bold">Almoxarifado</CardTitle>
+          <CardTitle className="text-3xl font-bold">Warehouse Stock</CardTitle>
           <p className="text-sm text-muted-foreground">
             Sistema de Gestão de Estoque
           </p>

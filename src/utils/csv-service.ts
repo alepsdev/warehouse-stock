@@ -2,30 +2,162 @@ import { Product, Movement } from "../types";
 import { toast } from "@/components/ui/sonner";
 
 const DEFAULT_PRODUCTS: Product[] = [
+  // 1. Chapas
   {
     id: "1",
-    name: "Madeira",
-    quantity: 10,
-    description: "Madeira Premium",
-    category: "ESTOQUE",
+    name: "MDF 15mm Branco",
+    quantity: 20,
+    description: "Chapa de MDF 15mm acabamento branco",
+    category: "Chapas",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
     id: "2",
-    name: "Mesa Office Desk",
-    quantity: 5,
-    description: "Mesa Ergonomica office desk",
-    category: "ESCRITORIO",
+    name: "MDF 18mm Cru",
+    quantity: 15,
+    description: "Chapa de MDF 18mm acabamento cru",
+    category: "Chapas",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  // 2. Ferragens
+  {
+    id: "3",
+    name: "Dobradiça com amortecimento",
+    quantity: 50,
+    description: "Dobradiça para porta de armário com amortecimento",
+    category: "Ferragens",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   },
   {
-    id: "3",
-    name: "Mesa de Cabeceira",
+    id: "4",
+    name: "Corrediça telescópica",
+    quantity: 30,
+    description: "Corrediça telescópica para gaveta",
+    category: "Ferragens",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "5",
+    name: "Puxador metálico",
+    quantity: 40,
+    description: "Puxador metálico para gaveta",
+    category: "Ferragens",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "6",
+    name: "Suporte mão francesa",
+    quantity: 25,
+    description: "Suporte tipo mão francesa para prateleira",
+    category: "Ferragens",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "7",
+    name: "Fecho magnético",
+    quantity: 60,
+    description: "Fecho magnético para porta",
+    category: "Ferragens",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  // 3. Fixadores e Acessórios
+  {
+    id: "8",
+    name: "Parafuso 4x40mm",
+    quantity: 200,
+    description: "Parafuso Philips 4x40mm",
+    category: "Fixadores e Acessórios",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "9",
+    name: "Cavilha de madeira",
+    quantity: 150,
+    description: "Cavilha de madeira 8mm",
+    category: "Fixadores e Acessórios",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "10",
+    name: "Cola branca",
+    quantity: 10,
+    description: "Cola branca PVA para madeira",
+    category: "Fixadores e Acessórios",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "11",
+    name: "Cola instantânea (super-bonder)",
     quantity: 8,
-    description: "Mesa de Cabeceira com estrutura de madeira",
-    category: "QUARTO",
+    description: "Cola instantânea para pequenos reparos",
+    category: "Fixadores e Acessórios",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  // 4. Revestimentos e Acabamentos
+  {
+    id: "12",
+    name: "Fita de borda",
+    quantity: 100,
+    description: "Fita de borda PVC branca",
+    category: "Revestimentos e Acabamentos",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  // 5. Componentes Elétricos
+  {
+    id: "13",
+    name: "Fita de LED",
+    quantity: 12,
+    description: "Fita de LED 5m 12V",
+    category: "Componentes Elétricos",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "14",
+    name: "Fonte para LED",
+    quantity: 6,
+    description: "Fonte 12V para fita de LED",
+    category: "Componentes Elétricos",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  // 7. Insumos Gerais
+  {
+    id: "15",
+    name: "Lixa 120",
+    quantity: 30,
+    description: "Lixa grão 120 para madeira",
+    category: "Insumos Gerais",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "16",
+    name: "Estopa",
+    quantity: 5,
+    description: "Estopa para limpeza",
+    category: "Insumos Gerais",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  },
+  {
+    id: "17",
+    name: "Óleo para lubrificação",
+    quantity: 2,
+    description: "Óleo multiuso para lubrificação",
+    category: "Insumos Gerais",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   }
@@ -35,29 +167,65 @@ const DEFAULT_MOVEMENTS: Movement[] = [
   {
     id: "1",
     productId: "1",
-    productName: "Madeira Premium",
+    productName: "MDF 15mm Branco",
     type: "ADD",
     quantity: 10,
     date: new Date().toISOString(),
-    notes: "Estoque Inicial"
+    notes: "Entrada inicial de MDF 15mm Branco"
   },
   {
     id: "2",
-    productId: "2",
-    productName: "Mesa Office Desk",
+    productId: "3",
+    productName: "Dobradiça com amortecimento",
     type: "ADD",
-    quantity: 5,
+    quantity: 20,
     date: new Date().toISOString(),
-    notes: "Estoque Inicial"
+    notes: "Compra de ferragens"
   },
   {
     id: "3",
-    productId: "3",
-    productName: "Mesa de Cabeceira",
+    productId: "8",
+    productName: "Parafuso 4x40mm",
     type: "ADD",
-    quantity: 8,
+    quantity: 100,
     date: new Date().toISOString(),
-    notes: "Estoque Inicial"
+    notes: "Reposição de parafusos"
+  },
+  {
+    id: "4",
+    productId: "12",
+    productName: "Fita de borda",
+    type: "ADD",
+    quantity: 50,
+    date: new Date().toISOString(),
+    notes: "Compra de fitas de borda"
+  },
+  {
+    id: "5",
+    productId: "15",
+    productName: "Lixa 120",
+    type: "ADD",
+    quantity: 10,
+    date: new Date().toISOString(),
+    notes: "Entrada de insumos gerais"
+  },
+  {
+    id: "6",
+    productId: "1",
+    productName: "MDF 15mm Branco",
+    type: "REMOVE",
+    quantity: 2,
+    date: new Date().toISOString(),
+    notes: "Uso em projeto de armário"
+  },
+  {
+    id: "7",
+    productId: "3",
+    productName: "Dobradiça com amortecimento",
+    type: "REMOVE",
+    quantity: 5,
+    date: new Date().toISOString(),
+    notes: "Montagem de porta de armário"
   }
 ];
 
